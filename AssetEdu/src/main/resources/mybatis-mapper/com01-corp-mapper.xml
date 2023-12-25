@@ -49,4 +49,58 @@
 	   WHERE 1=1
 	   	<include refid="whereCondition"/>
 	</select>
+	
+	   
+   <select id="selectOne" parameterType="Com01Corp" resultType="Com01Corp">
+   	select 	com01_corp_cd as com01CorpCd,      <!-- 기관코드 -->           
+			com01_corp_nm as com01CorpNm,      <!-- 기관명 -->            
+			com01_corp_type as com01CorpType,    <!-- 기관구분(CorpType) --> 
+			com01_corp_enm as com01CorpEnm,     <!-- 기관영문명 -->          
+			com01_extn_corp_cd as com01ExtnCorpCd, <!-- 대외코드 -->
+            com01_corp_type_nm as com01CorpTypeNm 
+       FROM ( 
+               SELECT com01_corp.*
+                    , f_com_nm('CorpType', com01_corp_type) as com01_corp_type_nm
+                 FROM com01_corp
+            ) t
+	   WHERE 1=1
+   		<if test="com01CorpCd != null">
+	       	AND com01_corp_cd = #{com01CorpCd}
+		</if>
+   </select>
+   
+   <insert id="insert" parameterType="Com01Corp">
+   insert into
+   				com01_corp
+						   (com01_corp_cd,
+							com01_corp_nm,
+							com01_corp_type,
+							com01_corp_enm,
+							com01_extn_corp_cd)
+   	values
+   						   (#{com01CorpCd},
+   						   	#{com01CorpNm},
+   						   	#{com01CorpType},
+   						   	#{com01CorpEnm},
+   						   	#{com01ExtnCorpCd})
+   </insert>
+	
+	<update id="update" parameterType="Com01Corp">
+	update com01_corp
+	set
+			com01_corp_nm = #{com01CorpNm},
+			com01_corp_type = #{com01CorpType},
+			com01_corp_enm = #{com01CorpEnm},
+			com01_extn_corp_cd = #{com01ExtnCorpCd}
+	
+	where 1=1
+	AND
+			com01_corp_cd = #{com01CorpCd}
+	</update>
+	
+	<delete id="delete" parameterType="string">
+	delete from com01_corp
+	where
+		com01_corp_cd = #{corpCd}
+	</delete>
 </mapper>

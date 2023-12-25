@@ -7,7 +7,13 @@
 		<!--    검색조건 -->
    		<if test="com02ComCd != null">
 	       	AND com02_com_cd = #{com02ComCd}
-		</if>		
+		</if>
+		<if test="com02CodeType != null">
+			AND com02_code_type = #{com02CodeType}
+		</if>
+		<if test="com02UseYn != null">
+			AND com02_use_yn = #{com02UseYn}
+		</if>
    		<if test="searchText != null">
 	       	AND upper(concat(com02_com_cd, com02_code_nm)) like concat('%',upper(#{searchText}),'%')
 		</if>
@@ -16,7 +22,7 @@
 <select id="selectList" parameterType="Condition" resultType="Com02Code">
 select 
 		com02_com_cd 	as 	com02ComCd, 
-		com02_dtl_cd 	as 	com02ComDtlCd, 
+		com02_dtl_cd 	as 	com02DtlCd, 
 		com02_code_nm 	as 	com02CodeNm, 
 		com02_code_type as 	com02CodeType, 
 		com02_seq 		as 	com02Seq, 
@@ -27,7 +33,7 @@ from
 		
 WHERE 1=1
 		<include refid="whereConditon"/>
-			ORDER BY com02_seq	
+			ORDER BY com02_com_cd, com02_seq, com02_dtl_cd
 		<if test="pageAttr != null and pageAttr.offset != null">
 			OFFSET #{pageAttr.offset}
 		</if>   
@@ -43,5 +49,5 @@ WHERE 1=1
    			com02_code
    		WHERE 1=1
    			<include refid="whereConditon"/>	
-   </select> 
+   </select>
 </mapper>

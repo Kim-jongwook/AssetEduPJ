@@ -21,4 +21,13 @@ public class Com02CodeService {
 	public Long totalCount(Condition condition) {
 		return codeRepository.totalCount(condition);
 	}
+	
+	public List<Com02Code> codeList(String comCd){
+		Condition condition = new Condition();
+		condition.put("com02ComCd", comCd);
+		condition.put("com02CodeType", "D");
+		condition.put("com02UserYn", "true");
+		return codeRepository.selectList(condition);
+	}
+	
 }

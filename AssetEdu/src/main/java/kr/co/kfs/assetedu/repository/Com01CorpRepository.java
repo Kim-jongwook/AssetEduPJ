@@ -9,4 +9,8 @@ public interface Com01CorpRepository {
 	
 	List<Com01Corp> selectList(Condition condition);
 	Long selectCount(Condition condition);
+	Com01Corp selectOne(Com01Corp com01Corp);
+	int insert(Com01Corp com01Corp);
+	int update(Com01Corp com01Corp);
+	int delete(String corpCd);
 }

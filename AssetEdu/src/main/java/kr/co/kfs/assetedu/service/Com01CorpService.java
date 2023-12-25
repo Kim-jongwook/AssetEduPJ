@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.kfs.assetedu.model.Com01Corp;
 import kr.co.kfs.assetedu.model.Condition;
@@ -20,5 +21,24 @@ public class Com01CorpService {
 	
 	public Long selectCount(Condition condition) {
 		return com01CorpRepository.selectCount(condition);
+	}
+	
+	public Com01Corp selectOne(Com01Corp com01Corp) {
+		return com01CorpRepository.selectOne(com01Corp);
+	}
+	
+	@Transactional
+	public int insert(Com01Corp com01Corp) {
+		return com01CorpRepository.insert(com01Corp);		
+	}
+	
+	@Transactional
+	public int update(Com01Corp com01Corp) {
+		return com01CorpRepository.update(com01Corp);
+	}
+	
+	@Transactional
+	public int delete(String corpCd) {
+		return com01CorpRepository.delete(corpCd);
 	}
 }

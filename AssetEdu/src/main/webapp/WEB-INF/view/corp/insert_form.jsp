@@ -42,13 +42,13 @@
                     <td class="text-end">기관구분</td>
                     <td>
                         <form:select path="com01CorpType" class="form-select w-25">
-                            <form:options items="${corpTypeList}" itemValue="com02DtlCd" itemLabel="com02CodeNm"/> 
+                            <form:options items="${corpTypeList}" itemValue="com02DtlCd" itemLabel="com02CodeNm" /> 
                         </form:select>
                     </td>
                 </tr>
                 <tr class="align-middle">
                     <td class="text-end">대외기관코드</td>
-                    <td><form:input type="text" class="form-control w-25" path="com01ExtnCorpCd" /></td>
+                    <td><form:input type="text" class="form-control w-25" path="com01ExtnCorpCd" placeholder="" /></td>
                 </tr>
             </table>
             
