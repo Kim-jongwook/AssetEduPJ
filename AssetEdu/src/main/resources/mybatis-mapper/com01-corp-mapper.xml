@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+      "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.kfs.assetedu.repository.Com01CorpRepository">
+   <sql id="whereCondition">
+		<!-- 기관 검색 조건 -->
+		<if test="com01CorpCd != null and com01CorpCd != ''">
+	       	AND com01_corp_cd = #{com01CorpCd}
+		</if>
+		<if test="searchText != null and searchText != ''">
+	       	AND upper(concat(com01_corp_cd,com01_corp_nm,com01_corp_type_nm)) like upper(concat('%', #{searchText}, '%'))
+		</if>
+		
+   </sql>	
+   <select id="selectList" parameterType="Condition" resultType="Com01Corp">
+	   SELECT 
+			com01_corp_cd as com01CorpCd,      <!-- 기관코드 -->           
+			com01_corp_nm as com01CorpNm,      <!-- 기관명 -->            
+			com01_corp_type as com01CorpType,    <!-- 기관구분(CorpType) --> 
+			com01_corp_enm as com01CorpEnm,     <!-- 기관영문명 -->          
+			com01_extn_corp_cd as com01ExtnCorpCd, <!-- 대외코드 -->
+            com01_corp_type_nm as com01CorpTypeNm  <!-- 기관구분명 --> 
+	   FROM ( 
+	           SELECT com01_corp.*
+	                , f_com_nm('CorpType', com01_corp_type) as com01_corp_type_nm
+	             FROM com01_corp
+	        ) t
+	   WHERE 1=1
+		<include refid="whereCondition"/>
+	   ORDER BY com01_corp_type, com01_corp_cd, com01_corp_nm
+		<if test="pageAttr != null and pageAttr.offset != null ">
+	      	OFFSET ${pageAttr.offset}
+		</if>   
+		 <if test="pageAttr != null and pageAttr.limit != null">
+		 	LIMIT ${pageAttr.limit}
+		 </if>
+   </select>
+
+
+	<select id="selectCount" parameterType="Condition" resultType="Long">
+	<!--     기관 리스트 갯수 -->
+	   SELECT 
+			count(*) as count
+	   FROM ( 
+              SELECT com01_corp.*
+                   , f_com_nm('CorpType', com01_corp_type) as com01_corp_type_nm
+                FROM com01_corp
+           ) t
+	   WHERE 1=1
+	   	<include refid="whereCondition"/>
+	</select>
+</mapper>
