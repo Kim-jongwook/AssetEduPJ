@@ -1,38 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="kr.co.kfs.assetedu.repository.Itm01ItemRepository">
-   <sql id="whereConditon">
-		<!--    검색조건 -->
-   		<if test="itm01_item_cd != null">
+   <sql id="whereCondition">
+		<!-- 기관 검색 조건 -->
+		<if test="itm01ItemCd != null and itm01ItemCd != ''">
 	       	AND itm01_item_cd = #{itm01ItemCd}
-		</if>		
-   		<if test="searchText != null">
-	       	AND upper(concat(itm01ItemNm,itm01ItemEnm,itm01ItemCd)) like concat('%',upper(#{searchText}),'%')
 		</if>
-   </sql>	
-	<select id="selectList" parameterType="Condition" resultType="Itm01Item">
-	select
-			itm01_item_cd as itm01ItemCd,
-			itm01_item_nm as itm01ItemNm,
-			itm01_item_enm as itm01ItemEnm,
-			itm01_short_cd as itm01ShortCd,
-			itm01_iss_type as itm01IssType,
-			itm01_stk_type as itm01StkType,
-			itm01_list_type as itm01ListType,
-			itm01_market_type as itm01MarketType,
-			itm01_par as itm01Par,
-			itm01_iss_co_cd as itm01IssCoCd
-	from
-			itm01_item 
-	where 1=1
-	<include refid="whereConditon"></include>
-	<if test="pageAttr != null and pageAttr.offset != null">
-			OFFSET #{pageAttr.offset}
-	</if>
-	<if test="pageAttr != null and pageAttr.limit != null">
-			LIMIT #{pageAttr.limit}
-	</if>
-	</select>
+		<if test="searchText != null and searchText != ''">
+	       	AND upper(concat(itm01_item_cd,itm01_item_nm,itm01_short_cd)) like upper(concat('%', #{searchText}, '%'))
+		</if>
+   </sql>
+
+   <select id="selectList" parameterType="Condition" resultType="Itm01Item">
+	   SELECT 
+		  itm01_item_cd                             as itm01ItemCd       /** 종목코드*/                        
+		, itm01_item_nm                             as itm01ItemNm       /** 종목명*/                         
+		, itm01_item_enm                            as itm01ItemEnm      /** 영문명*/                         
+		, itm01_short_cd                            as itm01ShortCd      /** 단축코드*/                        
+		, itm01_iss_type                            as itm01IssType      /** 발행구분(StkIssType:공모/사모)*/      
+		, itm01_stk_type                            as itm01StkType      /** 증권종류(StkType:보통주/우선주/..)*/    
+		, itm01_list_type                           as itm01ListType     /** 상장구분(ListType:상장/비상장/상장폐지)*/  
+		, itm01_market_type                         as itm01MarketType   /** 시장구분(MarketType:코스피/코스닥/..)*/ 
+		, itm01_par                                 as itm01Par          /** 액면가*/                         
+		, itm01_iss_co_cd                           as itm01IssCoCd      /** 발행기관코드*/
+        , f_com_nm('StkIssType' ,itm01_iss_type   ) as itm01IssTypeNm    /** 발행구분명*/      
+        , f_com_nm('StkType'    ,itm01_stk_type   ) as itm01StkTypeNm    /** 증권종류명*/    
+        , f_com_nm('ListType'   ,itm01_list_type  ) as itm01ListTypeNm   /** 상장구분명*/  
+        , f_com_nm('MarketType' ,itm01_market_type) as itm01MarketTypeNm /** 시장구분명*/ 
+        , f_corp_nm(itm01_iss_co_cd)                as itm01IssCoNm      /** 발행기관코드명*/
+	   FROM 
+	   		edu.itm01_item
+	   WHERE 1=1
+	   	<include refid="whereCondition"/>
+       ORDER BY itm01_item_cd
+		<if test="pageAttr != null and pageAttr.offset != null ">
+	      	OFFSET ${pageAttr.offset}
+		</if>   
+		 <if test="pageAttr != null and pageAttr.limit != null">
+		 	LIMIT ${pageAttr.limit}
+		 </if>
+   </select>
+   
+   <select id="totalCount" parameterType="Condition" resultType="Long">
+   	SELECT
+   		count(*) as count 
+   	FROM 
+   		edu.itm01_item 
+   	WHERE 1=1 
+   		<include refid="whereCondition"></include>
+   </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </mapper>

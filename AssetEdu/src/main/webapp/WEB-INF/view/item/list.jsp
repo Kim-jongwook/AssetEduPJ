@@ -28,10 +28,10 @@
 	<h2><i class="fa-solid fa-cube my-3"></i>주식 종목정보 관리</h2>
   
 	<div class="container-lg p-3 border border-2 rounded-1">
-		<input type="text" class="form-control w-25 d-inline align-middle" placeholder="검색어를 입력하세요" id="searchText" name="searchText" value="${param.searchText}">
+		<input type="text" class="form-control w-50 d-inline align-middle" placeholder="검색어(종목코드/종목명/단축코드)를 입력하세요" id="searchText" name="searchText" value="${param.searchText}">
 		<a class="btn d-inline align-middle btn-primary btnRetrieve"><i class="fa-solid fa-search"></i> 조회</a>
         <a class="btn d-inline align-middle btn-secondary btnInit"><i class="fa-solid fa-backspace"></i> 초기화</a>
-		<a class="btn d-inline align-middle btn-success" href="/admin/user/insert"> <i class="fa-solid fa-user-plus"></i> 등록</a>
+		<a class="btn d-inline align-middle btn-success" href="/item/insert"> <i class="fa-solid fa-plus"></i> 등록</a>
 	</div>
 
 	<table class="table table-sm table-hover mt-3 item01Table" style="font-size:small">
@@ -61,7 +61,7 @@
 		      <td>${itm01.itm01StkType }</td>
 		      <td>${itm01.itm01ListType }</td>
 		      <td>${itm01.itm01MarketType }</td>
-		      <td>${itm01.itm01Par }</td>
+		      <td><fmt:formatNumber value="${itm01.itm01Par}" pattern="#,###"/></td>
 		      <td>
 			      <button class="btn btn-primary btn-sm btnModify" data-user-id="${itm01.itm01ItemCd }"><span><i class="fa-regular fa-pen-to-square"></i></span> 수정</button>
 			      <button class="btn btn-danger btn-sm btnDelete" data-user-id="${itm01.itm01ItemCd }" data-user-nm="${itm01.itm01ItemNm }"><span><i class="fa-regular fa-trash-can"></i></span> 삭제</button>
@@ -103,14 +103,14 @@ $(document).ready(function () {
  	//수정버튼
 	$('.btnModify').on('click', function(){
 		var userId = $(this).data('user-id');
-		AssetUtil.submitGet('/item/list', {sys01UserId: userId});
+		AssetUtil.submitGet('/item/update', {sys01UserId: userId});
 	});
  	
  	//삭제버튼
 	$('.btnDelete').on('click', function(){
 		var userId = $(this).data('user-id');
 		var userNm = $(this).data('user-nm');
-		if(confirm("사용자 " + userNm + "을(를) 삭제하시겠습니까?")){
+		if(confirm("종목 " + userNm + "을(를) 삭제하시겠습니까?")){
 			AssetUtil.submitGet('/item/delete', {sys01UserId: userId});	
 		}
 		
@@ -127,7 +127,7 @@ $(document).ready(function () {
 function go(no){
 	alert(no + "페이지입니다.");
 	var searchText = $('#searchText').val();
-	AssetUtil.submitGet('/admin/user/list', {currentPageNumber : no, searchText: searchText});
+	AssetUtil.submitGet('/item/list', {currentPageNumber : no, searchText: searchText});
 }
 </script>
 </body>

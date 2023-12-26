@@ -32,7 +32,7 @@
 		<div class="search-area">
 			<!-- 검색부분 조회,초기화 -->
 			<input type="text" class="form-control w-25 d-inline align-middle"
-				placeholder="검색어를 입력하세요" id="searchText" name="searchText"
+				placeholder="검색어(공통코드/공통코드명)를 입력하세요" id="searchText" name="searchText"
 				value="${param.searchText}"> <a
 				class="btn d-inline align-middle btn-primary btnRetrieve"><i
 				class="fa-solid fa-search"></i> 조회</a> <a

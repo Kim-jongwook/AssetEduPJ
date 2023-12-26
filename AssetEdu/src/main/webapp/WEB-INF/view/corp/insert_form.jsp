@@ -42,6 +42,7 @@
                     <td class="text-end">기관구분</td>
                     <td>
                         <form:select path="com01CorpType" class="form-select w-25">
+                            <form:option value="" label="선택"/>
                             <form:options items="${corpTypeList}" itemValue="com02DtlCd" itemLabel="com02CodeNm" /> 
                         </form:select>
                     </td>

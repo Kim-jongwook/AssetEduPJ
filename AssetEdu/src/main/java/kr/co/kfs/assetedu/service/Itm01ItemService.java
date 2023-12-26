@@ -15,7 +15,10 @@ public class Itm01ItemService {
 	Itm01ItemRepository itm01ItemRepository;
 	
 	public List<Itm01Item> selectList(Condition condition){
-		
 		return itm01ItemRepository.selectList(condition);
+	}
+	
+	public Long totalCount(Condition condition) {
+		return itm01ItemRepository.totalCount(condition);
 	}
 }
