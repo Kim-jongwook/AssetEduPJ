@@ -52,9 +52,77 @@
    		<include refid="whereCondition"></include>
    </select>
 
+	<insert id="insert" parameterType="Itm01Item">
+	insert into itm01_item
+		(
+		 itm01_item_cd
+		,itm01_item_nm
+		,itm01_item_enm
+		,itm01_short_cd
+		,itm01_iss_type
+		,itm01_stk_type
+		,itm01_list_type
+		,itm01_market_type
+		,itm01_par
+		,itm01_iss_co_cd
+		) 
+	values 
+		(
+		 #{itm01ItemCd}
+		,#{itm01ItemNm}
+		,#{itm01ItemEnm}
+		,#{itm01ShortCd}
+		,#{itm01IssType}
+		,#{itm01StkType}
+		,#{itm01ListType}
+		,#{itm01MarketType}
+		,#{itm01Par}
+		,#{itm01IssCoCd}
+		)
+	</insert>
+	
+	<select id="selectOne" parameterType="Itm01Item" resultType="Itm01Item">
+	   SELECT 
+		  itm01_item_cd                             as itm01ItemCd       /** 종목코드*/                        
+		, itm01_item_nm                             as itm01ItemNm       /** 종목명*/                         
+		, itm01_item_enm                            as itm01ItemEnm      /** 영문명*/                         
+		, itm01_short_cd                            as itm01ShortCd      /** 단축코드*/                        
+		, itm01_iss_type                            as itm01IssType      /** 발행구분(StkIssType:공모/사모)*/      
+		, itm01_stk_type                            as itm01StkType      /** 증권종류(StkType:보통주/우선주/..)*/    
+		, itm01_list_type                           as itm01ListType     /** 상장구분(ListType:상장/비상장/상장폐지)*/  
+		, itm01_market_type                         as itm01MarketType   /** 시장구분(MarketType:코스피/코스닥/..)*/ 
+		, itm01_par                                 as itm01Par          /** 액면가*/                         
+		, itm01_iss_co_cd                           as itm01IssCoCd      /** 발행기관코드*/
+		, f_corp_nm(itm01_iss_co_cd)                as itm01IssCoNm
+	   FROM 
+	   		edu.itm01_item
+	   WHERE 1=1 
+	   		 AND itm01_item_cd= #{itm01ItemCd}
+	</select>
 
+	<update id="update" parameterType="Itm01Item">
+	UPDATE edu.itm01_item
+	SET
+		  itm01_item_nm      = #{itm01ItemNm}       /** 종목명*/                         
+		, itm01_item_enm     = #{itm01ItemEnm}      /** 영문명*/                         
+		, itm01_short_cd     = #{itm01ShortCd}      /** 단축코드*/                        
+		, itm01_iss_type     = #{itm01IssType}      /** 발행구분(StkIssType:공모/사모)*/      
+		, itm01_stk_type     = #{itm01StkType}      /** 증권종류(StkType:보통주/우선주/..)*/    
+		, itm01_list_type    = #{itm01ListType}     /** 상장구분(ListType:상장/비상장/상장폐지)*/  
+		, itm01_market_type  = #{itm01MarketType}   /** 시장구분(MarketType:코스피/코스닥/..)*/ 
+		, itm01_par          = #{itm01Par}          /** 액면가*/                         
+		, itm01_iss_co_cd    = #{itm01IssCoCd}      /** 발행기관코드*/
+	WHERE 1=1
+		AND itm01_item_cd = #{itm01ItemCd}
+	</update>
 
-
+	<delete id="delete" parameterType="Itm01Item">
+	DELETE
+	FROM
+		edu.itm01_item
+	WHERE 1=1
+		AND itm01_item_cd = #{itm01ItemCd}
+	</delete>
 
 
 

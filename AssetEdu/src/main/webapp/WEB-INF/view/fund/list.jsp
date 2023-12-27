@@ -12,7 +12,7 @@
 <!-- =================================================== -->
 <jsp:include page="../common/meta_css.jsp" flush="false" />
 <!-- =================================================== -->
-<title><c:out value="${pageTitle}" default="Item List" /></title>
+<title><c:out value="${pageTitle}" default="Fund List" /></title>
 </head>
 <style>
 .table tbody tr.highlight td {
@@ -25,44 +25,51 @@
 <!-- =================================================== -->
 <main class="container mx-3 my-3">
   
-	<h2><i class="fa-solid fa-cube my-3"></i>주식 종목정보 관리</h2>
+	<h2><i class="fa-solid fa-cube my-3"></i>펀드정보 관리</h2>
   
 	<div class="container-lg p-3 border border-2 rounded-1">
-		<input type="text" class="form-control w-50 d-inline align-middle" placeholder="검색어(종목코드/종목명/단축코드)를 입력하세요" id="searchText" name="searchText" value="${param.searchText}">
+		<input type="text" class="form-control w-50 d-inline align-middle" placeholder="검색어(펀드/펀드명/펀드유형)를 입력하세요" id="searchText" name="searchText" value="${param.searchText}">
 		<a class="btn d-inline align-middle btn-primary btnRetrieve"><i class="fa-solid fa-search"></i> 조회</a>
         <a class="btn d-inline align-middle btn-secondary btnInit"><i class="fa-solid fa-backspace"></i> 초기화</a>
-		<a class="btn d-inline align-middle btn-success" href="/item/insert"> <i class="fa-solid fa-plus"></i> 등록</a>
+		<a class="btn d-inline align-middle btn-success" href="/fund/insert"> <i class="fa-solid fa-plus"></i> 등록</a>
 	</div>
 
-	<table class="table table-sm table-hover mt-3 item01Table" style="font-size:small">
+	<table class="mt-3 table table-sm table-hover mt-3 fundTable" style="font-size:small">
 	  <thead class="table-light">
-	    <tr>
-	      <th scope="col" class="text-center" style="width:50px">No</th>
-	      <th scope="col">종목코드</th>
-	      <th scope="col">종목한글명</th>
-	      <th scope="col">종목영문명</th>
-	      <th scope="col">단축코드</th>
-	      <th scope="col">증권종류</th>
-	      <th scope="col">상장구분</th>
-	      <th scope="col">시장구분</th>
-	      <th scope="col">액면가</th>
+	    <tr class="text-center">
+	      <th scope="col" style="width:20px">No</th>
+	      <th scope="col" style="width:50px">펀드</th>
+	      <th scope="col">펀드명</th>
+	      <th scope="col" style="width:80px">펀드유형</th>
+	      <th scope="col">공모/사모</th>
+	      <th scope="col" style="width:60px">단위</th>
+	      <th scope="col" style="width:50px">모/자</th>
+	      <th scope="col" style="width:85px">설정일자</th>
+	      <th scope="col" style="width:100px">예탁원코드</th>
+	      <th scope="col">운용사</th>
+	      <th scope="col">수탁사</th>
+	      <th scope="col">사무수탁사</th>
+	      <th scope="col" style="width:75px"></th>
 	    </tr>
 	  </thead>
-	  <tbody class="table-group-divider">
-	  	<c:forEach var="itm01" items="${list}" varStatus="status">
+	  <tbody class="table-group-divider" >
+	  	<c:forEach var="fund" items="${list}" varStatus="status">
 		    <tr class="align-middle">
 		      <td scope="row" class="text-center fw-bold">${status.count }</td>
-		      <td>${itm01.itm01ItemCd }</td>
-		      <td>${itm01.itm01ItemNm }</td>
-		      <td>${itm01.itm01ItemEnm }</td>
-		      <td>${itm01.itm01ShortCd }</td>
-		      <td>${itm01.itm01StkType }</td>
-		      <td>${itm01.itm01ListType }</td>
-		      <td>${itm01.itm01MarketType }</td>
-		      <td><fmt:formatNumber value="${itm01.itm01Par}" pattern="#,###"/></td>
+		      <td class="text-center">${fund.fnd01FundCd }</td>
+		      <td>${fund.fnd01FundNm }</td>
+		      <td>${fund.fnd01FundTypeNm }</td>
+              <td>${fund.fnd01PublicNm }</td>
+              <td>${fund.fnd01UnitNm }</td>
+              <td class="text-center">${fund.fnd01ParentNm }</td>
+              <td class="text-center"><asset:displayYmd ymd="${fund.fnd01StartDate}"/></td>
+              <td class="text-center">${fund.fnd01KsdItemCd }</td>
+              <td>${fund.fnd01MngCoNm }</td>
+              <td>${fund.fnd01TrustCoNm }</td>
+              <td>${fund.fnd01OfficeCoNm }</td>
 		      <td>
-			      <button class="btn btn-primary btn-sm btnModify" data-item-cd="${itm01.itm01ItemCd }"><span><i class="fa-regular fa-pen-to-square"></i></span> 수정</button>
-			      <button class="btn btn-danger btn-sm btnDelete" data-item-cd="${itm01.itm01ItemCd }" data-item-nm="${itm01.itm01ItemNm }"><span><i class="fa-regular fa-trash-can"></i></span> 삭제</button>
+			      <button class="btn btn-primary btn-sm btnModify" data-fund-cd="${fund.fnd01FundCd }"><span><i class="fa-regular fa-pen-to-square"></i></span> 수정</button>
+			      <button class="btn btn-danger btn-sm btnDelete" data-fund-cd="${fund.fnd01FundCd }" data-fund-nm="${fund.fnd01FundNm }"><span><i class="fa-regular fa-trash-can"></i></span> 삭제</button>
 		      </td>
 		    </tr>
 	    </c:forEach>
@@ -90,26 +97,26 @@ $(document).ready(function () {
  	//조회버튼
 	$('.btnRetrieve').on('click', function(){
 		var searchText = $('#searchText').val();
-		AssetUtil.submitGet('/item/list', {searchText: searchText});
+		AssetUtil.submitGet('/fund/list', {searchText: searchText});
 	});
  	
  	//초기화버튼
     $('.btnInit').on('click', function(){
-        AssetUtil.submitGet('/item/list', {searchText: null});
+        AssetUtil.submitGet('/fund/list', {searchText: null});
     });
   	
  	//수정버튼
 	$('.btnModify').on('click', function(){
-		var itm01ItemCd = $(this).data('item-cd');
-		AssetUtil.submitGet('/item/update', {itm01ItemCd: itm01ItemCd});
+		var fnd01FundCd = $(this).data('fund-cd');
+		AssetUtil.submitGet('/fund/update', {fnd01FundCd: fnd01FundCd});
 	});
  	
  	//삭제버튼
 	$('.btnDelete').on('click', function(){
-		var itm01ItemCd = $(this).data('item-cd');
-		var itm01ItemNm = $(this).data('item-nm');
-		if(confirm("종목 " + itm01ItemNm + "을(를) 삭제하시겠습니까?")){
-			AssetUtil.submitGet('/item/delete', {itm01ItemCd: itm01ItemCd});	
+		var fnd01FundCd = $(this).data('fund-cd');
+		var fnd01FundNm = $(this).data('fund-nm');
+		if(confirm("종목 " + fnd01FundNm + "을(를) 삭제하시겠습니까?")){
+			AssetUtil.submitGet('/item/delete', {fnd01FundCd: fnd01FundCd});	
 		}
 		
 	});
@@ -125,7 +132,7 @@ $(document).ready(function () {
 function go(no){
 	alert(no + "페이지입니다.");
 	var searchText = $('#searchText').val();
-	AssetUtil.submitGet('/item/list', {currentPageNumber : no, searchText: searchText});
+	AssetUtil.submitGet('/fund/list', {currentPageNumber : no, searchText: searchText});
 }
 </script>
 </body>

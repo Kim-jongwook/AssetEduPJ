@@ -1,5 +1,7 @@
 package kr.co.kfs.assetedu.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,7 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import kr.co.kfs.assetedu.model.Com01Corp;
 import kr.co.kfs.assetedu.model.Condition;
+import kr.co.kfs.assetedu.model.PageAttr;
 import kr.co.kfs.assetedu.service.Com01CorpService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,7 +30,12 @@ public class PopupController {
 		log.debug("기관팝업");
 		Condition condition = new Condition();
 		condition.put("searchText", searchText);
-		
+		Long totalCount = com01CorpService.selectCount(condition);
+		PageAttr pageAttr = new PageAttr(totalCount, pageSize, currentPageNumber);
+		condition.put("pageAttr", pageAttr);
+		List<Com01Corp> list = com01CorpService.selectList(condition);
+		model.addAttribute("list", list);
+		model.addAttribute("pageAttr", pageAttr);
 		return "/common/popup_corp";
 	}
 }
