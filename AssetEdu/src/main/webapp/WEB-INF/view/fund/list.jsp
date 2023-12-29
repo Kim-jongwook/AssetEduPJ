@@ -90,7 +90,7 @@ $(document).ready(function () {
 	console.log('ready...');
 	
 	//테이블 클릭시 하이라이트 표시
-    $('.item01Table').on('click', 'tbody tr', function(event) {
+    $('.fundTable').on('click', 'tbody tr', function(event) {
         $(this).addClass('highlight').siblings().removeClass('highlight');
     });
 	
@@ -116,7 +116,7 @@ $(document).ready(function () {
 		var fnd01FundCd = $(this).data('fund-cd');
 		var fnd01FundNm = $(this).data('fund-nm');
 		if(confirm("종목 " + fnd01FundNm + "을(를) 삭제하시겠습니까?")){
-			AssetUtil.submitGet('/item/delete', {fnd01FundCd: fnd01FundCd});	
+			AssetUtil.submitGet('/fund/delete', {fnd01FundCd: fnd01FundCd});	
 		}
 		
 	});

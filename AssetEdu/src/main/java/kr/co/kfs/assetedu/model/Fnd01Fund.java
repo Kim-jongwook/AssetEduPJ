@@ -52,8 +52,26 @@ public class Fnd01Fund {
 	
 	private String fnd01TrustCoCd; //수탁사코드
 	
-	private String fnd01OfficeCocd; //사무관리사(주)코드
+	private String fnd01OfficeCoCd; //사무관리사(주)코드
 	
 	private String fnd01SubOfficeCoCd; //사무관리사(부)코드
+	
+	private String fnd01FundTypeNm; //펀드유형명
+	
+	private String fnd01PublicNm; //공모/사모코드명
+	
+	private String fnd01UnitNm; //펀드단위코드명
+	
+	private String fnd01ParentNm; //모자구분코드명
+	
+	private String fnd01ParentFundNm; //모펀드명
+	
+	private String fnd01MngCoNm; //운용사명
+	
+	private String fnd01TrustCoNm; //수탁사명
+	
+	private String fnd01OfficeCoNm; //사무관리사(주)명
+	
+	private String fnd01SubOfficeCoNm; //사무관리사(부)명
 	
 }
