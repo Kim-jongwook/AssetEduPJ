@@ -183,7 +183,7 @@ $(document).ready(function () {
     });
     
     $('#btnPopupMngCo').on('click', function(){
-        var url = '/popup/corp?corpCd=fnd01MngCoCd&corpNm=fnd01MngCoNm';
+        var url = '/popup/corp?corpCd=fnd01MngCoCd&corpNm=fnd01MngCoNm&com01CorpType=04';
         var prop = {};
         var width = 720;
         var height = 518;
@@ -191,7 +191,7 @@ $(document).ready(function () {
         return false;
     });
     $('#btnPopupTrustCo').on('click', function(){
-        var url = '/popup/corp?corpCd=fnd01TrustCoCd&corpNm=fnd01TrustCoNm';
+        var url = '/popup/corp?corpCd=fnd01TrustCoCd&corpNm=fnd01TrustCoNm&com01CorpType=02';
         var prop = {};
         var width = 720;
         var height = 518;
@@ -199,7 +199,7 @@ $(document).ready(function () {
         return false;
     });
     $('#btnPopupOfficeCo').on('click', function(){
-        var url = '/popup/corp?corpCd=fnd01OfficeCoCd&corpNm=fnd01OfficeCoNm';
+        var url = '/popup/corp?corpCd=fnd01OfficeCoCd&corpNm=fnd01OfficeCoNm&com01CorpType=05';
         var prop = {};
         var width = 720;
         var height = 518;

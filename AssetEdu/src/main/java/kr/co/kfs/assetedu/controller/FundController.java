@@ -2,13 +2,19 @@ package kr.co.kfs.assetedu.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.kfs.assetedu.model.Condition;
 import kr.co.kfs.assetedu.model.Fnd01Fund;
@@ -52,4 +58,72 @@ public class FundController {
 		model.addAttribute("parentCdList", com02CodeService.codeList("FundParentCode"));
 		return "/fund/insert_form";
 	}
+	
+	@PostMapping("insert")
+	public String insert(@Valid @ModelAttribute("fund")Fnd01Fund fund
+						 , BindingResult result
+						 , RedirectAttributes redirectAttributes
+						 , Model model) {
+		log.debug("펀드 insert 폼 제출");
+		log.debug("fund: {}", fund);
+		
+		if(result.hasErrors()) {
+			model.addAttribute("fundTypeList", com02CodeService.codeList("FundType"));
+			model.addAttribute("publicCdList", com02CodeService.codeList("PublicCode"));
+			model.addAttribute("unitCdList"  , com02CodeService.codeList("FundUnitCode"));
+			model.addAttribute("parentCdList", com02CodeService.codeList("FundParentCode"));
+			return "/fund/insert_form";
+		}
+		
+		String msg;
+		
+		Fnd01Fund checkFund = fnd01FundService.selectOne(fund);
+		if(checkFund != null) {
+			msg = String.format(" \"%s\" 펀드 코드는 이미 \"%s\"으로 등록되어 있습니다. ", fund.getFnd01FundCd(), checkFund.getFnd01FundNm());
+			result.addError(new FieldError("", "", msg));
+			model.addAttribute("fundTypeList", com02CodeService.codeList("FundType"));
+			model.addAttribute("publicCdList", com02CodeService.codeList("PublicCode"));
+			model.addAttribute("unitCdList"  , com02CodeService.codeList("FundUnitCode"));
+			model.addAttribute("parentCdList", com02CodeService.codeList("FundParentCode"));
+			return "/fund/insert_form";
+		}else {
+			int i = fnd01FundService.insert(fund);
+			log.debug("Db에 적용된 개수: {}", i);
+			
+			msg = String.format("\"%s\" 펀드가 등록되었습니다", fund.getFnd01FundNm());
+			redirectAttributes.addAttribute("mode", "insert");
+			redirectAttributes.addAttribute("msg" , msg);
+			redirectAttributes.addAttribute("pageTitle" , "펀드정보등록");
+			redirectAttributes.addAttribute("fund01FundCd", fund.getFnd01FundCd());
+			return "redirect:/fund/success";
+		}
+	}
+	
+	@GetMapping("success")
+	public String success(String msg, String mode, String pageTitle, String fund01FundCd, Model model) {
+		model.addAttribute("pageTitle", pageTitle);
+		model.addAttribute("msg", msg);
+		model.addAttribute("mode", mode);
+		model.addAttribute("fund01FundCd", fund01FundCd);
+		log.debug("success");
+		log.debug("msg: {}, mode: {}, pageTitle: {}, fund01FundCd:{}, model:{}", msg, mode, pageTitle, fund01FundCd, model);
+		return "/fund/success";
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

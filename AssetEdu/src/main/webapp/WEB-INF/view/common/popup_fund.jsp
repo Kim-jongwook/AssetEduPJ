@@ -11,7 +11,7 @@
 <!-- =================================================== -->
 <jsp:include page="../common/meta_css.jsp" flush="false" />
 <!-- =================================================== -->
-<title><c:out value="${pageTitle}" default="기관선택" /></title>
+<title><c:out value="${pageTitle}" default="펀드선택" /></title>
 </head>
 <style>
 .table tbody tr.highlight td {
@@ -20,45 +20,41 @@
 </style>
 <body>
 <main class="container-fluid mt-3">
- 	<form id="form1" action="/popup/corp" method="GET">
- 		<input type="hidden" name="corpCd" value="${param.corpCd }"/>
- 		<input type="hidden" name="corpNm" value="${param.corpNm }"/>
+ 	<form id="form1" action="/popup/fund" method="GET">
+ 		<input type="hidden" name="fundCd"   value="${param.fundCd   }"/>
+ 		<input type="hidden" name="fundNm"   value="${param.fundNm   }"/>
+        <input type="hidden" name="parentYn" value="${param.parentYn }"/>
  		<input type="hidden" name="pageSize" value="${pageAttr.pageSize }"/>
- 		<input type="hidden" name="com01CorpType" value="${param.com01CorpType }"/>
 <%--  		<input type="hidden" name="currentPageNumber" value="${pageAttr.currentPageNumber }"/> --%>
  		<input type="hidden" name="currentPageNumber" value="1"/>
 
         <div>
-            <input type="text" class="form-control w-50 d-inline align-middle" placeholder="검색어(기관코드/기관명)를 입력하세요" id="searchText" name="searchText" value="${param.searchText}">
+            <input type="text" class="form-control w-50 d-inline align-middle" placeholder="검색어(펀드코드/펀드명)를 입력하세요" id="searchText" name="searchText" value="${param.searchText}">
             <button class="btn d-inline align-middle btn-primary btnRetrieve"><i class="fa-solid fa-search"></i> 조회</button>
             <button class="btn d-inline align-middle btn-success btnInit"><i class="fa-solid fa-backspace"></i> 초기화</button>
         </div>
 	</form>
 
-	<table class="table table-hover table-sm corpTable" style="font-size:small">
+	<table class="table table-hover table-sm fundTable" style="font-size:small">
 	  <thead class="table-light">
 	    <tr class="text-center">
 	      <th scope="col" style="width:20px">&nbsp;</th>
-	      <th scope="col" style="width:90px">기관구분</th>
-          <th scope="col" style="width:80px">기관코드</th>
-	      <th scope="col">기관명</th>
-	      <th scope="col">기관영문명</th>
+	      <th scope="col" style="width:100px">펀드코드</th>
+	      <th scope="col">펀드명</th>
 	    </tr>
 	  </thead>
 	  <tbody class="table-group-divider" >
-	  	<c:forEach var="corp" items="${list}" varStatus="status"> 
+	  	<c:forEach var="fund" items="${list}" varStatus="status"> 
 		    <tr class="align-middle">
-		      <td><input type="radio" data-com01-corp-cd="${corp.com01CorpCd }" data-com01-corp-nm="${corp.com01CorpNm }" id="com01CorpCd_${status.count }" name="com01CorpCd"/></td>
-              <td class="text-center"><label for="com01CorpTypeNm_${status.count }">${corp.com01CorpTypeNm }</label></td>
-              <td class="text-center"><label for="com01CorpCd_${status.count }">${corp.com01CorpCd }</label></td>
-		      <td class="text-center"><label for="com01CorpCd_${status.count }">${corp.com01CorpNm }</label></td>
-		      <td class="text-center"><label for="com01CorpCd_${status.count }">${corp.com01CorpEnm }</label></td>
+		      <td><input type="radio" data-fnd01-fund-cd="${fund.fnd01FundCd }" data-fnd01-fund-nm="${fund.fnd01FundNm }" id="fnd01FundCd_${status.count }" name="fnd01FundCd"/></td>
+		      <td class="text-center"><label for="fnd01FundCd_${status.count }">${fund.fnd01FundCd }</label></td>
+		      <td><label for="fnd01FundCd_${status.count }">${fund.fnd01FundNm }</label></td>
 		    </tr>
 	    </c:forEach>
 	  </tbody>
 	</table>
 
-	<div class="container-fluid mb-3" style="position:absolute;bottom:0;left:0">
+    <div class="container-fluid mb-3" style="position:absolute;bottom:0;left:0">
         <hr>
         <div class="row">
             <div class="col"><kfs:Pagination pageAttr="${pageAttr }" id="pageAttr"></kfs:Pagination> </div>
@@ -76,42 +72,42 @@
 <!-- -================================================== -->
 <script>
 $(document).ready(function () {
-	console.log('ready...기관선택팝업');
+    console.log('ready...펀드선택팝업');
 
     //테이블 클릭시 하이라이트 표시
-    $('.corpTable').on('click', 'tbody tr', function(event) {
+    $('.fundTable').on('click', 'tbody tr', function(event) {
           $(this).addClass('highlight').siblings().removeClass('highlight');
     });
-	
-	var corpCd = '<%=request.getParameter("corpCd")%>';
-	var corpNm = '<%=request.getParameter("corpNm")%>';
-	$('#btnSelect').on('click', function(){
-		var count = $('input:radio[name=com01CorpCd]:checked').length;
-		if(count == 0){
-			alert('기관을 선택해 주십시오');
-			return;
-		}
-		var $radio = $('input:radio[name=com01CorpCd]:checked');
-		var cd = $radio.data('com01-corp-cd');
-		var nm = $radio.data('com01-corp-nm');
-		console.log(cd + ", " + nm);
-		$(opener.document).find('#'+corpCd).val(cd);
-		$(opener.document).find('#'+corpNm).val(nm);
-		window.close();
-	});
-	$('#btnCancel').click(()=>window.close());
-	$('.btnInit').on('click', function(){
+    
+    var fundCd = '<%=request.getParameter("fundCd")%>';
+    var fundNm = '<%=request.getParameter("fundNm")%>';
+    $('#btnSelect').on('click', function(){
+        var count = $('input:radio[name=fnd01FundCd]:checked').length;
+        if(count == 0){
+            alert('펀드를 선택해 주십시오');
+            return;
+        }
+        var $radio = $('input:radio[name=fnd01FundCd]:checked');
+        var cd = $radio.data('fnd01-fund-cd');
+        var nm = $radio.data('fnd01-fund-nm');
+        console.log(cd + ", " + nm);
+        $(opener.document).find('#'+fundCd).val(cd);
+        $(opener.document).find('#'+fundNm).val(nm);
+        window.close();
+    });
+    $('#btnCancel').click(()=>window.close());
+    $('.btnInit').on('click', function(){
         $('#searchText').val(''); 
         $('#form1').submit();
     });
     $('.btnRetrieve').on('click', function(){
-        $('#form1').submit();
+    	$('#form1').submit();
     });
 });
 function goPageClick(pageNo){
-	$('#form1 input[name=currentPageNumber]').val(pageNo);
-	$('#form1').submit();
+    $('#form1 input[name=currentPageNumber]').val(pageNo);
+    $('#form1').submit();
 }
-</script>	
+</script> 
 </body>
 </html>

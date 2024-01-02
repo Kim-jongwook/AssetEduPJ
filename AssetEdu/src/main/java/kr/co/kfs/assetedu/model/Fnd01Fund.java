@@ -3,6 +3,7 @@ package kr.co.kfs.assetedu.model;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import kr.co.kfs.assetedu.servlet.converter.YmdFormat;
 import lombok.Data;
 
 @Data
@@ -26,12 +27,15 @@ public class Fnd01Fund {
 	
 	private String fnd01ParentFundCd; //모펀드 코드
 	
+	@YmdFormat("-")
 	private String fnd01StartDate; // 설정일자
 	
+	@YmdFormat("-")
 	private String fnd01EndDate; //해지일자
 	
 	private Integer fnd01AccPeriod; //회계기간
 	
+	@YmdFormat("-")
 	private String fnd01FirstCloseDate; //최초결산일자
 	
 	private String fnd01CurCd; //기준통화

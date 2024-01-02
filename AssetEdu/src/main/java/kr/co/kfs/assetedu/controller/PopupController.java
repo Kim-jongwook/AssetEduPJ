@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.co.kfs.assetedu.model.Com01Corp;
 import kr.co.kfs.assetedu.model.Condition;
+import kr.co.kfs.assetedu.model.Fnd01Fund;
 import kr.co.kfs.assetedu.model.PageAttr;
 import kr.co.kfs.assetedu.service.Com01CorpService;
 import kr.co.kfs.assetedu.service.Fnd01FundService;
@@ -29,13 +30,22 @@ public class PopupController {
 	public String popupCorp(@RequestParam(value = "pageSize", required = false, defaultValue = "10")Integer pageSize
 							,@RequestParam(value = "currentPageNumber", required = false, defaultValue = "1")Integer currentPageNumber
 							,Model model
-							,String searchText) {
+							,String searchText
+							,String corpCd
+							,String corpNm
+							,String com01CorpType) {
 		log.debug("기관팝업");
+		log.debug("searchText : {}, corpCd : {}, corpNm: {}", searchText, corpCd, corpNm);
+		log.debug("currentPageNumber : {}, pageSize : {}", currentPageNumber, pageSize);
+		
 		Condition condition = new Condition();
 		condition.put("searchText", searchText);
+		condition.put("com01CorpType", com01CorpType);
 		Long totalCount = com01CorpService.selectCount(condition);
 		PageAttr pageAttr = new PageAttr(totalCount, pageSize, currentPageNumber);
+		log.debug("pageAttr : {}", pageAttr);
 		condition.put("pageAttr", pageAttr);
+
 		List<Com01Corp> list = com01CorpService.selectList(condition);
 		model.addAttribute("list", list);
 		model.addAttribute("pageAttr", pageAttr);
@@ -46,12 +56,25 @@ public class PopupController {
 	public String popupFund(@RequestParam(value = "pageSize", required = false, defaultValue = "10")Integer pageSize
 							, @RequestParam(value = "currentPageNumber", required = false, defaultValue = "1")Integer currentPageNumber
 							, Model model
-							, String searchText) {
+							, String searchText
+							, String fundCd
+							, String fundNm
+							, String parentYn) {
 		log.debug("펀드팝업");
+		log.debug("searchText : {}, fundCd : {}, fundNm: {}, parentYn: {}", searchText, fundCd, fundNm, parentYn);
+		log.debug("currentPageNumber : {}, pageSize : {}", currentPageNumber, pageSize);
+		
 		Condition condition = new Condition();
 		condition.put("searchText", searchText);
-		Long totalCount = fund
-		
-		return "";
+		condition.put("parentYn", parentYn);
+		Long totalCount = fnd01FundService.totalCount(condition);
+		PageAttr pageAttr = new PageAttr(totalCount, pageSize, currentPageNumber);
+		log.debug("pageAttr:{}", pageAttr);
+
+		condition.put("pageAttr", pageAttr);
+		List<Fnd01Fund> list = fnd01FundService.selectList(condition);
+		model.addAttribute("list", list);
+		model.addAttribute("pageAttr", pageAttr);
+		return "/common/popup_fund";
 	}
 }

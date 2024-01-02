@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.kfs.assetedu.model.Condition;
 import kr.co.kfs.assetedu.model.Fnd01Fund;
@@ -20,5 +21,14 @@ public class Fnd01FundService {
 	
 	public List<Fnd01Fund> selectList(Condition condition){
 		return fnd01FundRepository.selectList(condition);
+	}
+	
+	public Fnd01Fund selectOne(Fnd01Fund fnd01Fund) {
+		return fnd01FundRepository.selectOne(fnd01Fund);
+	}
+	
+	@Transactional
+	public int insert(Fnd01Fund fnd01Fund) {
+		return fnd01FundRepository.insert(fnd01Fund);
 	}
 }

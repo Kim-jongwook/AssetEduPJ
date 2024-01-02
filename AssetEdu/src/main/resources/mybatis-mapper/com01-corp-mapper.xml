@@ -7,6 +7,9 @@
 		<if test="com01CorpCd != null and com01CorpCd != ''">
 	       	AND com01_corp_cd = #{com01CorpCd}
 		</if>
+		<if test="com01CorpType != null and com01CorpType != ''">
+			AND com01_corp_type = #{com01CorpType}
+		</if>
 		<if test="searchText != null and searchText != ''">
 	       	AND upper(concat(com01_corp_cd,com01_corp_nm,com01_corp_type_nm)) like upper(concat('%', #{searchText}, '%'))
 		</if>
