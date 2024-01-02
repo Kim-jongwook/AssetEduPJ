@@ -40,7 +40,7 @@
 				
 				<c:if test="${mode eq 'update'}">
 					<form id="form1" method="GET" action="/fund/update">
-						<input type="hidden" name="Fund01FundCd" value="${fund01FundCd }"/>
+						<input type="hidden" name="fnd01FundCd" value="${fund01FundCd }"/>
 						<button type="submit" class="btn btn-warning">계속수정</button>
 					</form>
 				</c:if>

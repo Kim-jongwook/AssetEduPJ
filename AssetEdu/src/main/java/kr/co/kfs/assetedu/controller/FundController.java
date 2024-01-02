@@ -110,6 +110,54 @@ public class FundController {
 		return "/fund/success";
 	}
 	
+	@GetMapping("update")
+	public String update(@ModelAttribute("fund")Fnd01Fund fund, Model model) {
+		log.debug("펀드 업데이트폼");
+		fund = fnd01FundService.selectOne(fund);
+		
+		model.addAttribute("fund", fund);
+		model.addAttribute("fundTypeList", com02CodeService.codeList("FundType"));
+		model.addAttribute("publicCdList", com02CodeService.codeList("PublicCode"));
+		model.addAttribute("unitCdList"  , com02CodeService.codeList("FundUnitCode"));
+		model.addAttribute("parentCdList", com02CodeService.codeList("FundParentCode"));
+		return "/fund/update_form";
+	}
+	
+	@PostMapping("update")
+	public String updateSubmit(@Valid @ModelAttribute("fund")Fnd01Fund fund, BindingResult result 
+								, Model model
+								, RedirectAttributes redirectAttributes) {
+		log.debug("펀드 업데이트 폼 제출");
+		log.debug("fund: {}", fund);
+		if(result.hasErrors()) {
+			model.addAttribute("fundTypeList", com02CodeService.codeList("FundType"));
+			model.addAttribute("publicCdList", com02CodeService.codeList("PublicCode"));
+			model.addAttribute("unitCdList"  , com02CodeService.codeList("FundUnitCode"));
+			model.addAttribute("parentCdList", com02CodeService.codeList("FundParentCode"));
+			return "/fund/update_form";
+		}else {
+			int i = fnd01FundService.update(fund);
+			String msg;
+			msg = String.format(" \"%s\" 펀드가 수정되었습니다.", fund.getFnd01FundNm());
+			redirectAttributes.addAttribute("msg", msg);
+			redirectAttributes.addAttribute("pageTitle", "펀드정보수정");
+			redirectAttributes.addAttribute("mode", "update");
+			redirectAttributes.addAttribute("fund01FundCd", fund.getFnd01FundCd());
+			
+			log.debug("redirectAttributes: {}", redirectAttributes);
+			
+			return "redirect:/fund/success";
+		}
+	}
+	
+	@GetMapping("delete")
+	public String delete(@RequestParam(value = "fnd01FundCd")String fnd01FundCd) {
+		log.debug("종목 삭제");
+		log.debug("fnd01FundCd: {}", fnd01FundCd);
+		int i = fnd01FundService.delete(fnd01FundCd);
+		log.debug("DB에 적용된 갯수: {}", i);
+		return "redirect:/fund/list";
+	}
 }
 
 

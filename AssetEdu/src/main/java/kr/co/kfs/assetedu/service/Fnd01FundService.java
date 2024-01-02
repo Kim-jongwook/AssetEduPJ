@@ -31,4 +31,14 @@ public class Fnd01FundService {
 	public int insert(Fnd01Fund fnd01Fund) {
 		return fnd01FundRepository.insert(fnd01Fund);
 	}
+	
+	@Transactional
+	public int update(Fnd01Fund fnd01Fund) {
+		return fnd01FundRepository.update(fnd01Fund);
+	}
+	
+	@Transactional
+	public int delete(String fnd01FundCd) {
+		return fnd01FundRepository.delete(fnd01FundCd);
+	}
 }

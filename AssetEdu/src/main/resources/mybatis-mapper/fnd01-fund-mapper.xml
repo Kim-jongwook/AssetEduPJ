@@ -29,14 +29,14 @@ FROM
            , f_com_nm('FundParentCode', fnd01_parent_cd)   as fnd01_parent_nm
            , CASE WHEN fnd01_parent_fund_cd IS NULL THEN ''
                   ELSE ( SELECT p.fnd01_fund_nm
-                           FROM fnd01_fund p
+                           FROM edu.fnd01_fund p
                           WHERE p.fnd01_fund_cd = f.fnd01_parent_fund_cd )
                   END                                      as fnd01_parent_fund_nm
            , f_corp_nm(fnd01_mng_co_cd)                    as fnd01_mng_co_nm
            , f_corp_nm(fnd01_trust_co_cd)                  as fnd01_trust_co_nm
            , f_corp_nm(fnd01_office_co_cd)                 as fnd01_office_co_nm
            , f_corp_nm(fnd01_sub_office_co_cd)             as fnd01_sub_office_co_nm
-        FROM fnd01_fund f
+        FROM edu.fnd01_fund f
     ) t
 WHERE 1=1
 	<include refid="whereCondition"></include>
@@ -84,7 +84,7 @@ FROM
             , f_com_nm('FundParentCode', fnd01_parent_cd)   as fnd01_parent_nm
             , CASE WHEN fnd01_parent_fund_cd IS NULL THEN ''
                    ELSE ( SELECT p.fnd01_fund_nm
-                            FROM fnd01_fund p
+                            FROM edu.fnd01_fund p
                            WHERE p.fnd01_fund_cd = f.fnd01_parent_fund_cd )
                    END                                      as fnd01_parent_fund_nm
             , f_corp_nm(fnd01_mng_co_cd)                    as fnd01_mng_co_nm
@@ -92,7 +92,7 @@ FROM
             , f_corp_nm(fnd01_office_co_cd)                 as fnd01_office_co_nm
             , f_corp_nm(fnd01_sub_office_co_cd)             as fnd01_sub_office_co_nm
       FROM
-      		fnd01_fund f
+      		edu.fnd01_fund f
 	) t
 	WHERE 1=1
 		<include refid="whereCondition"></include>
@@ -147,7 +147,7 @@ FROM
             , f_com_nm('FundParentCode', fnd01_parent_cd)   as fnd01_parent_nm
             , CASE WHEN fnd01_parent_fund_cd IS NULL THEN ''
                    ELSE ( SELECT p.fnd01_fund_nm
-                            FROM fnd01_fund p
+                            FROM edu.fnd01_fund p
                            WHERE p.fnd01_fund_cd = f.fnd01_parent_fund_cd )
                    END                                      as fnd01_parent_fund_nm
             , f_corp_nm(fnd01_mng_co_cd)                    as fnd01_mng_co_nm
@@ -155,7 +155,7 @@ FROM
             , f_corp_nm(fnd01_office_co_cd)                 as fnd01_office_co_nm
             , f_corp_nm(fnd01_sub_office_co_cd)             as fnd01_sub_office_co_nm
       FROM
-      		fnd01_fund f
+      		edu.fnd01_fund f
 	) t
 	WHERE 1=1
 	<if test="fnd01FundCd != null">
@@ -165,7 +165,7 @@ FROM
 
 <insert id="insert" parameterType="Fnd01Fund">
 INSERT INTO 
-			fnd01_fund
+			edu.fnd01_fund
 					(
 						fnd01_fund_cd
 						, fnd01_fund_nm
@@ -216,6 +216,46 @@ INSERT INTO
 				  )
 </insert>
 
+<update id="update" parameterType="Fnd01Fund">
+UPDATE 
+	edu.fnd01_fund
+SET
+	  fnd01_fund_nm = #{fnd01FundNm}
+	, fnd01_fund_type = #{fnd01FundType}
+	, fnd01_public_cd = #{fnd01PublicCd}
+	, fnd01_unit_cd = #{fnd01UnitCd}
+	, fnd01_parent_cd = #{fnd01ParentCd}
+	, fnd01_parent_fund_cd = #{fnd01ParentFundCd}
+	, fnd01_start_date = #{fnd01StartDate}
+	, fnd01_end_date = #{fnd01EndDate}
+	, fnd01_acc_period = #{fnd01AccPeriod}
+	, fnd01_first_close_date = #{fnd01FirstCloseDate}
+	, fnd01_cur_cd = #{fnd01CurCd}
+	, fnd01_ksd_item_cd = #{fnd01KsdItemCd}
+	, fnd01_kofia_cd = #{fnd01KofiaCd}
+	, fnd01_kofia_class_cd = #{fnd01KofiaClassCd}
+	, fnd01_fss_cd = #{fnd01FssCd}
+	, fnd01_manager = #{fnd01Manager}
+	, fnd01_sub_manager = #{fnd01SubManager}
+	, fnd01_mng_co_cd = #{fnd01MngCoCd}
+	, fnd01_trust_co_cd = #{fnd01TrustCoCd}
+	, fnd01_office_co_cd = #{fnd01OfficeCoCd}
+	, fnd01_sub_office_co_cd = #{fnd01SubOfficeCoCd}
+WHERE 1=1
+<if test="fnd01FundCd != null and fnd01FundCd != ''">
+	AND fnd01_fund_cd = #{fnd01FundCd}
+</if>
+</update>
+
+<delete id="delete" parameterType="String">
+DELETE 
+	FROM 
+		edu.fnd01_fund 
+	WHERE 1=1
+	<if test="fnd01FundCd != null and fnd01FundCd != ''">
+		AND fnd01_fund_cd = #{fnd01FundCd}
+	</if>
+</delete>
 
 
 

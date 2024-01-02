@@ -10,4 +10,6 @@ public interface Fnd01FundRepository {
 	List<Fnd01Fund> selectList(Condition condition);
 	Fnd01Fund selectOne(Fnd01Fund fnd01Fund);
 	int insert(Fnd01Fund fnd01Fund);
+	int update(Fnd01Fund fnd01Fund);
+	int delete(String fnd01FundCd);
 }
