@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+      "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+      
+<mapper namespace="kr.co.kfs.assetedu.repository.Jnl10AcntRepository">
+<sql id="whereCondition">
+	<if test="jnl10AcntCd != null and jnl10AcntCd != ''">
+		AND jnl10_acnt_cd = #{jnl10AcntCd}
+	</if>
+	<if test="searchText !=null and searchText != ''">
+		AND concat(jnl10_acnt_nm,' ',jnl10_acnt_cd) like concat('%',#{searchText},'%')
+	</if>
+	<if test="parentYn != null and parentYn != ''">
+		AND jnl10_slip_yn = 'false'
+	</if>
+</sql>
+<select id="totalCount" parameterType="Condition" resultType="Long">
+	SELECT 
+		COUNT(*)
+	FROM
+		edu.jnl10_acnt
+	WHERE 1=1
+		<include refid="whereCondition"></include>
+</select>
+
+<select id="list" parameterType="Condition" resultType="Jnl10Acnt">
+SELECT
+	 jnl10_acnt_cd as jnl10AcntCd
+	,jnl10_acnt_nm as jnl10AcntNm
+	,jnl10_parent_cd as jnl10ParentCd
+	,jnl10_acnt_attr_cd as jnl10AcntAttrCd
+	,jnl10_drcr_type as jnl10DrcrType
+	,jnl10_slip_yn as jnl10SlipYn
+	,jnl10_use_yn as jnl10UseYn
+	,(
+		SELECT
+			com02_code_nm 
+		FROM
+			com02_code 
+		WHERE 1=1 
+			AND com02_com_cd = 'AcntAttrCode' 
+			AND com02_dtl_cd = A.jnl10_acnt_attr_cd 
+			AND COALESCE(com02_use_yn, 'false') = 'true' 
+	) as jnl10AcntAttrNm 
+	,(
+		SELECT
+			com02_code_nm 
+		FROM
+			com02_code 
+		WHERE 1=1 
+			AND com02_com_cd = 'DrcrType' 
+			AND com02_dtl_cd = A.jnl10_drcr_type 
+			AND COALESCE(com02_use_yn, 'false') = 'true' 
+	) as jnl10DrcrTypeNm 
+FROM
+	edu.jnl10_acnt A 
+WHERE 1=1 
+<include refid="whereCondition"></include>
+ ORDER BY jnl10_acnt_cd 
+<if test="pageAttr != null and pageAttr.offset != null">
+   	OFFSET #{pageAttr.offset}
+</if>   
+ <if test="pageAttr != null and pageAttr.limit != null">
+ 	LIMIT #{pageAttr.limit}
+ </if>
+</select>
+
+<select id="selectOne" parameterType="Jnl10Acnt" resultType="Jnl10Acnt">
+SELECT
+	 jnl10_acnt_cd as jnl10AcntCd
+	,jnl10_acnt_nm as jnl10AcntNm
+	,jnl10_parent_cd as jnl10ParentCd
+	,(
+		SELECT 
+			jnl10_acnt_nm 
+		FROM 
+			edu.jnl10_acnt 
+		WHERE 
+			jnl10_acnt_cd = A.jnl10_parent_cd 
+	) AS jnl10ParentNm
+	,jnl10_acnt_attr_cd as jnl10AcntAttrCd
+	,jnl10_drcr_type as jnl10DrcrType
+	,jnl10_slip_yn as jnl10SlipYn
+	,jnl10_use_yn as jnl10UseYn
+	,(
+		SELECT
+			com02_code_nm 
+		FROM
+			com02_code 
+		WHERE 1=1 
+			AND com02_com_cd = 'AcntAttrCode' 
+			AND com02_dtl_cd = A.jnl10_acnt_attr_cd 
+			AND COALESCE(com02_use_yn, 'false') = 'true' 
+	) as jnl10AcntAttrNm 
+	,(
+		SELECT
+			com02_code_nm 
+		FROM
+			com02_code 
+		WHERE 1=1 
+			AND com02_com_cd = 'DrcrType' 
+			AND com02_dtl_cd = A.jnl10_drcr_type 
+			AND COALESCE(com02_use_yn, 'false') = 'true' 
+	) as jnl10DrcrTypeNm 
+FROM
+	edu.jnl10_acnt A 
+WHERE 1=1 
+<if test="jnl10AcntCd != null and jnl10AcntCd != ''">
+	AND jnl10_acnt_cd= #{jnl10AcntCd}
+</if>
+</select>
+
+<insert id="insert" parameterType="Jnl10Acnt">
+INSERT
+	INTO 
+		edu.jnl10_acnt
+			(
+				 jnl10_acnt_cd
+				,jnl10_acnt_nm
+				,jnl10_parent_cd
+				,jnl10_acnt_attr_cd
+				,jnl10_drcr_type
+				,jnl10_slip_yn
+				,jnl10_use_yn
+			)
+		VALUES
+			(
+				 #{jnl10AcntCd}
+				,#{jnl10AcntNm}
+				,#{jnl10ParentCd}
+				,#{jnl10AcntAttrCd}
+				,#{jnl10DrcrType}
+				,#{jnl10SlipYn}
+				,#{jnl10UseYn}
+			)
+</insert>
+</mapper>

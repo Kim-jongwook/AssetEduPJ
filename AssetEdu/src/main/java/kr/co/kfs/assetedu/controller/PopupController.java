@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import kr.co.kfs.assetedu.model.Com01Corp;
 import kr.co.kfs.assetedu.model.Condition;
 import kr.co.kfs.assetedu.model.Fnd01Fund;
+import kr.co.kfs.assetedu.model.Jnl10Acnt;
 import kr.co.kfs.assetedu.model.PageAttr;
 import kr.co.kfs.assetedu.service.Com01CorpService;
 import kr.co.kfs.assetedu.service.Fnd01FundService;
+import kr.co.kfs.assetedu.service.Jnl10AcntService;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -25,6 +27,8 @@ public class PopupController {
 	Com01CorpService com01CorpService;
 	@Autowired
 	Fnd01FundService fnd01FundService;
+	@Autowired
+	Jnl10AcntService jnl10AcntService;
 	
 	@GetMapping("corp")
 	public String popupCorp(@RequestParam(value = "pageSize", required = false, defaultValue = "10")Integer pageSize
@@ -76,5 +80,30 @@ public class PopupController {
 		model.addAttribute("list", list);
 		model.addAttribute("pageAttr", pageAttr);
 		return "/common/popup_fund";
+	}
+	
+	@GetMapping("jnl/acnt/parent")
+	public String popupAcnt(@RequestParam(value = "pageSize", required = false, defaultValue = "10")Integer pageSize
+						   , @RequestParam(value = "currentPageNumber", required = false, defaultValue = "1")Integer currentPageNumber
+						   , String searchText
+						   , String acntCd
+						   , String acntNm
+						   , String parentYn
+						   , Model model) {
+		log.debug("계정과목팝업");
+		log.debug("searchText: {}, acntCd: {}, acntNm: {}, parentYn: {}, model: {}", searchText, acntCd, acntNm, parentYn, model);
+		log.debug("currentPageNumber : {}, pageSize : {}", currentPageNumber, pageSize);
+
+		Condition condition = new Condition();
+		condition.put("searchText", searchText);
+		condition.put("parentYn", parentYn);
+		Long totalCount = jnl10AcntService.totalCount(condition);
+		PageAttr pageAttr = new PageAttr(totalCount, pageSize, currentPageNumber);
+		log.debug("pageAttr:{}", pageAttr);
+		condition.put("pageAttr", pageAttr);
+		List<Jnl10Acnt> list = jnl10AcntService.list(condition);
+		model.addAttribute("list", list);
+		model.addAttribute("pageAttr", pageAttr);
+		return "/common/popup_jnl_acnt";
 	}
 }
