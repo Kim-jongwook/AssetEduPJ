@@ -107,7 +107,7 @@ public class AcntController {
 	}
 	
 	@GetMapping("/update/{jnl10AcntCd}")
-	public String update(@PathVariable(value = "jnl10AcntCd")String jnl10AcntCd, Model model,String parentYn) {
+	public String update(@PathVariable(value = "jnl10AcntCd")String jnl10AcntCd, Model model) {
 		log.debug("update form 진입");
 		Jnl10Acnt jnl10Acnt = new Jnl10Acnt();
 		jnl10Acnt.setJnl10AcntCd(jnl10AcntCd);
@@ -118,21 +118,33 @@ public class AcntController {
 		model.addAttribute("drcrTypeList", com02CodeService.codeList("DrcrType"));
 		log.debug("jnl10Acnt: {}, model: {}", jnl10Acnt, model);
 		return "jnl/acnt/update_form";
+	}
+	
+	@PostMapping("update")
+	public String update(@Valid @ModelAttribute("jnl10Acnt")Jnl10Acnt acnt 
+			, BindingResult result 
+			, Model model
+			, RedirectAttributes redirectAttributes) {
+		log.debug("update form 제출");
+		int i = jnl10AcntService.update(acnt);
+		log.debug("DB에 적용된 개수: {}", i);
 		
+		String msg= String.format(" \"%s\" 계정 과목이 수정되었습니다.", acnt.getJnl10AcntNm());
+		redirectAttributes.addAttribute("pageTitle", "계정정보 수정");
+		redirectAttributes.addAttribute("msg", msg);
+		redirectAttributes.addAttribute("jnl10AcntCd", acnt.getJnl10AcntCd());
+		redirectAttributes.addAttribute("mode", "update");
+		return "redirect:/jnl/acnt/success";
+	}
+	
+	@GetMapping("delete")
+	public String delete(@RequestParam("jnl10AcntCd") String jnl10AcntCd) {
+		log.debug("delete");
+		log.debug("jnl10Acnt: {}",jnl10AcntCd);
+		int i = jnl10AcntService.delete(jnl10AcntCd);
 		
+		log.debug("DB에 적용된 개수: {}", i);
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		return "redirect:/jnl/acnt/list";
 	}
 }

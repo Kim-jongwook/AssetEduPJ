@@ -32,4 +32,13 @@ public class Jnl10AcntService {
 		return jnl10AcntRepository.insert(jnl10Acnt);
 	}
 	
+	@Transactional
+	public int update(Jnl10Acnt jnl10Acnt) {
+		return jnl10AcntRepository.update(jnl10Acnt);
+	}
+	
+	@Transactional
+	public int delete(String jnl10AcntCd) {
+		return jnl10AcntRepository.delete(jnl10AcntCd);
+	}
 }

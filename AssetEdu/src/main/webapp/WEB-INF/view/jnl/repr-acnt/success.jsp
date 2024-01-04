@@ -18,15 +18,21 @@
 <!-- =================================================== -->
 <jsp:include page="../../common/header.jsp" flush="false" />
 <!-- =================================================== -->
-<c:set var="baseUrl" value="/jnl/acnt"/>
+<c:set var="baseUrl" value="/jnl/repr-acnt"/>
 <main class="container mx-3 my-3">
 
-	<h2><i class="fa-solid fa-cube my-3"></i> 계정과목 관리 > ${pageTitle} Success</h2>
+	<h2><i class="fa-solid fa-cube my-3"></i> 계정과목 관리 > 계정과목 등록 Success</h2>
 	
 	<div class="border-top border-2 p-4">
-		<div class="text-left py-5">
-			<h1>${msg}</h1>
-		</div>
+        <div class="text-left py-5">
+            <c:if test="${mode eq 'insert'}">
+                <h1>${reprAcnt.jnl11ReprAcntNm} 대표계정이 등록되었습니다</h1>
+            </c:if>
+            <c:if test="${mode eq 'update'}">
+                <h1>${reprAcnt.jnl11ReprAcntNm} 대표계정이 수정되었습니다</h1>
+            </c:if>
+        </div>
+
 		<div>
 			<table>
 			<tr>
@@ -38,7 +44,7 @@
 					<a href="${baseUrl }/insert" class="btn btn-warning">계속입력</a>
 				</c:if>
 				<c:if test="${mode eq 'update'}">
-					<form id="form1" method="GET" action="${baseUrl }/update/${jnl10AcntCd }">
+					<form id="form1" method="GET" action="${baseUrl }/update/${reprAcnt.jnl11ReprAcntCd }">
 						<button type="submit" class="btn btn-warning">계속수정</button>
 					</form>
 				</c:if>

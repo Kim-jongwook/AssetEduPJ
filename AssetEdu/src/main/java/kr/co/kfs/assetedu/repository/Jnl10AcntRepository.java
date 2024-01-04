@@ -10,4 +10,6 @@ public interface Jnl10AcntRepository {
 	List<Jnl10Acnt> list(Condition condition);
 	Jnl10Acnt selectOne(Jnl10Acnt jnl10Acnt);
 	int insert(Jnl10Acnt jnl10Acnt);
+	int update(Jnl10Acnt jnl10Acnt);
+	int delete(String jnl10AcntCd);
 }

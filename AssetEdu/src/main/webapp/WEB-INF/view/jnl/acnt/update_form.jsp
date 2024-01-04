@@ -124,7 +124,7 @@ $(document).ready(function () {
 	})
 	
     $('.btnPopupParentCode').on('click', function(){
-        var url = '/popup/jnl/acnt/parent?acntCd=jnl10ParentCd&acntNm=jnl10ParentNm';
+        var url = '/popup/jnl/acnt/parent?acntCd=jnl10ParentCd&acntNm=jnl10ParentNm&parentYn=false';
         var prop = {};
         var width = 720;
         var height = 518;

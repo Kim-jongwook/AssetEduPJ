@@ -134,4 +134,30 @@ INSERT
 				,#{jnl10UseYn}
 			)
 </insert>
+
+<update id="update" parameterType="Jnl10Acnt">
+UPDATE 
+	edu.jnl10_acnt 
+SET 
+	 jnl10_acnt_nm 			= #{jnl10AcntNm}    
+	,jnl10_parent_cd			= #{jnl10ParentCd} 
+	,jnl10_acnt_attr_cd		= #{jnl10AcntAttrCd} 
+	,jnl10_drcr_type   		= #{jnl10DrcrType} 
+	,jnl10_slip_yn     		= #{jnl10SlipYn} 
+	,jnl10_use_yn      		= #{jnl10UseYn} 
+WHERE 1=1
+<if test="jnl10AcntCd != null and jnl10AcntCd != ''">
+	AND jnl10_acnt_cd= #{jnl10AcntCd}
+</if>
+</update>
+
+<delete id="delete" parameterType="String">
+DELETE
+FROM 
+	edu.jnl10_acnt 
+WHERE 1=1 
+<if test="jnl10AcntCd != null and jnl10AcntCd != ''">
+	AND jnl10_acnt_cd= #{jnl10AcntCd}
+</if>
+</delete>
 </mapper>
